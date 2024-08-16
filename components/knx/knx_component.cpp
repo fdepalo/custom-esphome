@@ -15,7 +15,7 @@ namespace knx {
     //Evaluation of the received telegram -> only KNX telegrams are accepted
     if (eType == KNX_TELEGRAM) {
       KnxTelegram* telegram = this->get_received_telegram();
-        ESP_LOGD(TAG, "Received event for group %s.", telegram->get_target_group().c_str());
+        //ESP_LOGD(TAG, "Received event for group %s.", telegram->get_target_group().c_str());
         if (this->lambda_writer_.has_value())  // insert Labda function if available
           (*this->lambda_writer_)(*this);
     }
@@ -75,25 +75,25 @@ namespace knx {
       print_byte(incomingByte);
 
       if (this->is_knx_control_byte(incomingByte)) {
-        ESP_LOGD(TAG, "We have KNX CONTROL BYTE");
+        //ESP_LOGD(TAG, "We have KNX CONTROL BYTE");
         bool interested = this->read_knx_telegram();
         if (interested) {
-          ESP_LOGD(TAG, "Event KNX_TELEGRAM");
+          //ESP_LOGD(TAG, "Event KNX_TELEGRAM");
           return KNX_TELEGRAM;
         }
         else {
-          ESP_LOGD(TAG, "Event IRRELEVANT_KNX_TELEGRAM");
+          //ESP_LOGD(TAG, "Event IRRELEVANT_KNX_TELEGRAM");
           return IRRELEVANT_KNX_TELEGRAM;
         }
       }
       else if (incomingByte == TPUART_RESET_INDICATION_BYTE) {
         this->serial_read();
-        ESP_LOGD(TAG, "Event TPUART_RESET_INDICATION");
+        //ESP_LOGD(TAG, "Event TPUART_RESET_INDICATION");
         return TPUART_RESET_INDICATION;
       }
       else {
         this->serial_read();
-        ESP_LOGV(TAG, "UNKNOWN");
+        //ESP_LOGV(TAG, "UNKNOWN");
         return UNKNOWN;
       }
     }
@@ -110,10 +110,10 @@ namespace knx {
   }
 
   void KnxComponent::print_byte(int incomingByte) {
-    ESP_LOGV(TAG,"Incoming Byte: ");
-    ESP_LOGV(TAG, "int: %i ", incomingByte);
-    ESP_LOGV(TAG, " - ");
-    ESP_LOGV(TAG, "hex: %x", incomingByte);
+    //ESP_LOGV(TAG,"Incoming Byte: ");
+    //ESP_LOGV(TAG, "int: %i ", incomingByte);
+    //ESP_LOGV(TAG, " - ");
+    //ESP_LOGV(TAG, "hex: %x", incomingByte);
   }
 
   bool KnxComponent::read_knx_telegram() {
@@ -121,7 +121,7 @@ namespace knx {
     for (int i = 0; i < 6; i++) {
       this->_tg->set_buffer_byte(i, this->serial_read());
     }
-    ESP_LOGV(TAG,"Payload Length: %d", this->_tg->get_payload_length());
+    //ESP_LOGV(TAG,"Payload Length: %d", this->_tg->get_payload_length());
 
     int bufpos = 6;
     for (int i = 0; i < this->_tg->get_payload_length(); i++) {
