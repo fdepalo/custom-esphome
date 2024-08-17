@@ -203,66 +203,7 @@ bool KnxTelegram::verify_checksum() {
 }
 
 void KnxTelegram::print() {
-#if defined(TPUART_DEBUG)
-  serial->print("Repeated: ");
-  serial->println(is_repeated());
 
-  serial->print("Priority: ");
-  serial->println(get_priority());
-
-  serial->print("Source: ");
-  serial->print(get_source_area());
-  serial->print(".");
-  serial->print(get_source_line());
-  serial->print(".");
-  serial->println(get_source_member());
-
-  if (is_target_group()) {
-    serial->print("Target Group: ");
-    serial->print(get_target_main_group());
-    serial->print("/");
-    serial->print(get_target_middle_group());
-    serial->print("/");
-    serial->println(get_target_sub_group());
-  }
-  else {
-    serial->print("Target Physical: ");
-    serial->print(get_target_area());
-    serial->print(".");
-    serial->print(get_target_line());
-    serial->print(".");
-    serial->println(get_target_member());
-  }
-
-  serial->print("Routing Counter: ");
-  serial->println(get_routing_counter());
-
-  serial->print("Payload Length: ");
-  serial->println(get_payload_length());
-
-  serial->print("Command: ");
-  serial->println(get_command());
-
-  serial->print("First Data Byte: ");
-  serial->println(get_first_data_byte());
-
-  for (int i = 2; i < get_payload_length(); i++) {
-    serial->print("Data Byte ");
-    serial->print(i);
-    serial->print(": ");
-    serial->println(buffer[6 + i], BIN);
-  }
-
-
-  if (verify_checksum()) {
-    serial->println("Checksum matches");
-  }
-  else {
-    serial->println("Checksum mismatch");
-    serial->println(get_checksum(), BIN);
-    serial->println(calculate_checksum(), BIN);
-  }
-#endif
 }
 
 int KnxTelegram::calculate_checksum() {
